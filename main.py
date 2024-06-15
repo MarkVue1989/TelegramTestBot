@@ -1,7 +1,11 @@
 import telebot
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 #Conexión con nuestro bot
-TOKEN = '7191696119:AAF9BuOhdTyPJhNbwLjDeSWjrNsZivpZUPQ'
+TOKEN = os.getenv('TELEGRAM_BOT_KEY')
 bot = telebot.TeleBot(TOKEN)
 
 #Creación de comandos /start y /help
