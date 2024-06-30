@@ -2,12 +2,30 @@ import telebot
 from telebot import types
 import os
 from dotenv import load_dotenv
+import requests
 
 load_dotenv()
 
 #Conexión con nuestro bot
 TOKEN = os.getenv('TELEGRAM_BOT_KEY')
 bot = telebot.TeleBot(TOKEN)
+# Url api
+BASE_URL='https://api.chucknorris.io/jokes/random'
+
+def get_joke():
+    response = requests.get(BASE_URL)
+    data = response.json()
+    if(response.status_code == 200):
+        return data['value']
+    else:
+        return 'No hay chiste'
+    
+
+#Comando obtener chiste de chuck norris
+@bot.message_handler(commands=['chiste'])
+def send_joke(message):
+    joke = get_joke()
+    bot.reply_to(message, joke)
 
 #Creación de comandos /start y /help
 
@@ -18,7 +36,7 @@ def send_welcome(message):
 
 @bot.message_handler(commands=['help'])
 def send_help(message):
-    bot.reply_to(message,'Puedes escribir cosas y yo las repetire.')
+    bot.reply_to(message,'Los comandos implementados son: /start, /help, /chiste, /opcion, /foto')
 
 # @bot.message_handler(func=lambda m:True)
 # def echo_all(message):
